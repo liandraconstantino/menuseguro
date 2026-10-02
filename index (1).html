@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>MenuSeguro</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F2F7F4;--card:#fff;--ink:#17302B;--mute:#52696A;--pri:#0E7C66;--on:#fff;--priL:#D8EFE8;--red:#B93226;--redL:#FBE4E1;--amb:#7A4F00;--ambL:#FFF1CC;--ok:#1E7B4A;--okL:#DDF2E5;--line:#CFE0D9;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0F1D1A;--card:#172A26;--ink:#E6F2EE;--mute:#9DB5AE;--pri:#4CC9A9;--on:#0F1D1A;--priL:#1D3B34;--red:#FF9A8F;--redL:#3A1C19;--amb:#F2C45C;--ambL:#3A2E10;--ok:#6FD99B;--okL:#14301F;--line:#2B433D}}
+:root[data-theme="dark"]{--bg:#0F1D1A;--card:#172A26;--ink:#E6F2EE;--mute:#9DB5AE;--pri:#4CC9A9;--on:#0F1D1A;--priL:#1D3B34;--red:#FF9A8F;--redL:#3A1C19;--amb:#F2C45C;--ambL:#3A2E10;--ok:#6FD99B;--okL:#14301F;--line:#2B433D}
+*,*::before,*::after{box-sizing:inherit}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:Nunito,system-ui,sans-serif;font-size:17px;line-height:1.5}
+.wrap{max-width:660px;margin:0 auto;padding:0 16px 40px}
+.hero{background:#0E3D35;color:#F2F7F4;margin:0 -16px 18px;padding:26px 20px 24px;border-radius:0 0 28px 28px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:900;font-size:1.4rem;margin-bottom:14px}
+.hero h1{font-size:2.3rem;line-height:1.05;margin:0 0 8px;font-weight:900}
+.hero p{margin:0 0 18px;color:#BFE3D8}
+.lbl{position:relative;overflow:hidden;background:#fff;color:#17302B;border-radius:14px;padding:12px 14px;font-size:.82rem;font-weight:700;line-height:1.7;max-width:360px}
+.lbl mark{padding:0 4px;border-radius:4px}
+.lbl .r{background:#B93226;color:#fff}.lbl .y{background:#FFD84D;color:#17302B}
+.scan{position:absolute;left:0;right:0;height:3px;background:#0E7C66;box-shadow:0 0 14px 4px #4CC9A9;animation:sc 2.6s ease-in-out infinite}
+@keyframes sc{0%,100%{top:0}50%{top:calc(100% - 3px)}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px;margin-bottom:16px}
+h2{font-size:1.2rem;margin:0 0 4px;display:flex;gap:10px;align-items:center;font-weight:800}
+.n{flex:none;width:30px;height:30px;border-radius:50%;background:var(--pri);color:var(--on);display:grid;place-items:center;font-size:.95rem}
+.hint{color:var(--mute);font-size:.92rem;margin:0 0 12px}
+.row{display:flex;flex-wrap:wrap;gap:8px}
+button{font:inherit;cursor:pointer;min-height:44px}
+.chip{border:2px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:6px 14px;font-weight:700;transition:transform .12s}
+.chip:active{transform:scale(.94)}
+.chip[aria-pressed="true"]{background:var(--pri);border-color:var(--pri);color:var(--on)}
+.cx{display:inline-flex;gap:2px;align-items:center}
+.rm{min-height:36px;width:36px;border:0;background:transparent;color:var(--mute);font-size:1rem}
+.add{display:flex;gap:8px;margin-top:12px}
+input[type=text],textarea{width:100%;padding:12px;border:2px solid var(--line);border-radius:12px;background:var(--bg);color:var(--ink);font:inherit}
+textarea{min-height:110px;margin-top:12px;resize:vertical}
+.btn{border:0;border-radius:12px;background:var(--pri);color:var(--on);font-weight:800;padding:10px 16px}
+.big{width:100%;margin-top:12px;font-size:1.05rem;padding:13px}
+.cam{flex:1 1 200px;display:flex;align-items:center;justify-content:center;gap:8px;min-height:52px;border:2px dashed var(--pri);border-radius:14px;background:var(--priL);color:var(--pri);font-weight:800;font-size:1.02rem;padding:12px;cursor:pointer;text-align:center}
+.cam:focus-within{outline:3px solid var(--amb);outline-offset:2px}
+.sr{position:absolute;width:1px;height:1px;opacity:0;overflow:hidden}
+.ex{border:2px solid var(--pri);background:transparent;color:var(--pri);border-radius:12px;padding:6px 12px;font-weight:700}
+.note{color:var(--mute);font-size:.88rem;margin:8px 0 0}
+button:focus-visible,textarea:focus-visible,input:focus-visible{outline:3px solid var(--amb);outline-offset:2px}
+.sem{display:flex;gap:14px;align-items:center;border-radius:16px;padding:16px;margin-bottom:12px;animation:pop .35s ease-out}
+@keyframes pop{from{transform:scale(.9);opacity:0}to{transform:none;opacity:1}}
+.sem .ic{flex:none;font-size:2.4rem}.sem b{font-size:1.15rem;line-height:1.3}
+.v-red{background:var(--redL);color:var(--red)}.v-amb{background:var(--ambL);color:var(--amb)}.v-ok{background:var(--okL);color:var(--ok)}.v-neu{background:var(--priL);color:var(--pri)}
+.blk{border-left:6px solid var(--pri);background:var(--bg);border-radius:10px;padding:12px 14px;margin-top:10px}
+.blk.w{border-color:var(--red)}.blk.t{border-color:var(--ok)}.blk.x{border-color:var(--amb)}
+.blk h3{margin:0 0 6px;font-size:1rem}.blk ul{margin:6px 0 0;padding-left:20px}
+.xray{background:var(--card);border:2px solid var(--line);border-radius:10px;padding:10px;line-height:1.9;overflow-wrap:anywhere}
+mark{background:none;color:inherit;border-radius:4px;padding:1px 4px;font-weight:800}
+.m-red{background:var(--red);color:var(--on)}.m-amb{background:var(--ambL);color:var(--amb);outline:1px solid var(--amb)}.m-tec{border-bottom:3px solid var(--pri)}
+.leg{font-size:.82rem;color:var(--mute);margin-top:6px}
+.tag{display:inline-block;margin:2px 4px 2px 0;padding:3px 10px;border-radius:999px;font-weight:800;font-size:.85rem;background:var(--ambL);color:var(--amb)}
+.tag.hit{background:var(--red);color:var(--on)}
+.idc{border:3px solid var(--red);border-radius:16px;padding:16px;margin-top:10px;background:var(--bg)}
+.idc .nm{font-size:1.5rem;font-weight:900}
+.okt{background:var(--okL);color:var(--ok)}
+.it{display:flex;gap:8px;align-items:center;justify-content:space-between;border:2px solid var(--line);border-radius:12px;padding:10px 12px;margin-top:8px}
+.it small{color:var(--mute)}
+.ai{white-space:pre-wrap;margin-top:12px}
+.foot{color:var(--mute);font-size:.85rem}.hide{display:none}
+@media (prefers-reduced-motion:reduce){.scan,.sem{animation:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="hero">
+<div class="brand"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#FFD84D" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="10" cy="10" r="6.5"/><path d="M15 15l6 6"/></svg><span>MenuSeguro</span></div>
+<h1>Comer sem medo<br>começa aqui.</h1>
+<p>Seu perfil fica salvo. O MenuSeguro mostra o que evitar, o que comer no lugar e um cartão de alergias para quem cozinha para você.</p>
+<div class="lbl" aria-hidden="true"><div class="scan"></div>Farinha de trigo, <mark class="y">maltodextrina</mark>, <mark class="r">caseinato de sódio</mark>, <mark class="y">glutamato monossódico</mark>, <mark class="r">lecitina de soja</mark>...</div>
+</header>
+
+<section class="card">
+<h2><span class="n">1</span>Quem vai comer?</h2>
+<div class="row" id="perfs" style="margin:10px 0"></div>
+<div class="add" style="margin:0 0 12px"><input type="text" id="pin" placeholder="Nome (ex.: Maria, meu irmão)" aria-label="Nome do novo perfil" maxlength="30"><button class="btn" type="button" id="padd">Novo perfil</button></div>
+<p class="hint" id="phint"></p>
+<div class="row" id="chips"></div>
+<div class="add"><input type="text" id="cin" placeholder="Ex.: kiwi, camarão, corante amarelo" aria-label="Outra alergia" maxlength="40"><button class="btn" type="button" id="cadd">Adicionar</button></div>
+<details style="margin-top:14px"><summary style="cursor:pointer;font-weight:800">Salvar, compartilhar ou apagar</summary>
+<p class="hint" style="margin-top:8px">Gere um código para guardar os perfis ou passar para a família. Em outro aparelho, cole o código e toque em Importar. Alergia é dado de saúde: os dados ficam só neste aparelho e você pode apagar quando quiser.</p>
+<div class="add"><input type="text" id="code" placeholder="Código dos perfis" aria-label="Código dos perfis"><button class="btn" type="button" id="cgen">Gerar</button><button class="btn" type="button" id="cimp">Importar</button></div>
+<p class="note" id="cmsg"></p>
+<div class="row" style="margin-top:8px"><button class="ex" type="button" id="pdel">Apagar este perfil</button><button class="ex" type="button" id="pall">Apagar todos os dados</button></div>
+</details>
+</section>
+
+<section class="card hide" id="troque">
+<h2>🍽️ Do medo ao prato</h2>
+<div id="troqueBody" style="margin-top:8px"></div>
+</section>
+
+<section class="card hide" id="cartao">
+<h2>📇 Cartão de alergias</h2>
+<div class="idc" id="cartaoBody"></div>
+<p class="note">Tire um print e mostre na escola, no restaurante ou na casa de parentes.</p>
+</section>
+
+<section class="card">
+<h2><span class="n">2</span>Cole o rótulo</h2>
+<p class="hint">Cole a lista de ingredientes que está no pacote, ou teste com um exemplo.</p>
+<textarea id="txt" placeholder="Ou cole aqui: Sal, açúcar, amido de milho, glutamato monossódico..."></textarea>
+<div class="row" style="margin-top:10px">
+<span class="note" style="margin:0;align-self:center">Exemplos:</span>
+<button class="ex" type="button" data-s="tempero">Tempero em sachê</button>
+<button class="ex" type="button" data-s="biscoito">Biscoito recheado</button>
+<button class="ex" type="button" data-s="macarrao">Macarrão instantâneo</button>
+</div>
+<button class="btn big" type="button" id="go">Traduzir o rótulo</button>
+</section>
+
+<section class="card hide" id="res">
+<h2><span class="n">3</span>Resultado</h2>
+<div id="out" style="margin-top:12px"></div>
+</section>
+
+<section class="card" id="seguros">
+<h2>⭐ Meus produtos seguros</h2>
+<p class="hint">Produtos que você já conferiu no pacote. Rótulos podem mudar, então confira de novo ao comprar.</p>
+<div id="listaSeg"></div>
+</section>
+
+<p class="foot">O MenuSeguro ajuda a ler o rótulo, mas não substitui o pacote nem a orientação médica. Se você tem alergia grave, confirme sempre no rótulo físico antes de consumir.</p>
+</div>
+
+<script>
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const fold=s=>s.split("").map(c=>c.normalize("NFD")[0].toLowerCase()).join("");
+const rx=s=>s.replace(/[.*+?^${}()|[\]\\]/g,"\\$&");
+
+const ALERG={
+"Glúten":["trigo","centeio","cevada","aveia","malte","gluten","semolina"],
+"Leite":["leite","lactose","caseina","caseinato","whey","manteiga","lactoalbumina","creme de leite"],
+"Ovo":["ovo","albumina","clara","gema","lisozima"],
+"Soja":["soja"],
+"Amendoim":["amendoim"],
+"Oleaginosas":["castanha","noz","nozes","amendoa","avela","pistache","macadamia","caju"],
+"Peixe":["peixe","anchova","bacalhau","tilapia","sardinha"],
+"Crustáceos":["camarao","caranguejo","lagosta","siri","crustaceo"],
+"Gergelim":["gergelim"],
+"Milho":["milho"]
+};
+const EMO={"Glúten":"🌾","Leite":"🥛","Ovo":"🥚","Soja":"🌱","Amendoim":"🥜","Oleaginosas":"🌰","Peixe":"🐟","Crustáceos":"🦐","Gergelim":"🌿","Milho":"🌽"};
+const FOODS=[["Arroz",[],[]],["Feijão",[],["proteína","ferro"]],["Mandioca",[],[]],["Batata-doce",[],[]],["Banana",[],[]],["Laranja",[],[]],["Frango",[],["proteína"]],["Carne moída",[],["proteína","ferro"]],["Lentilha",[],["proteína","ferro"]],["Grão-de-bico",[],["proteína"]],["Couve",[],["cálcio","ferro"]],["Brócolis",[],["cálcio"]],["Ovo",["Ovo"],["proteína"]],["Leite",["Leite"],["cálcio"]],["Sardinha",["Peixe"],["cálcio","proteína"]],["Tofu",["Soja"],["proteína","cálcio"]],["Amendoim",["Amendoim"],["proteína"]],["Fubá",["Milho"],[]],["Aveia",["Glúten"],[]]];
+const NUTR={"Leite":"cálcio","Ovo":"proteína","Soja":"proteína","Peixe":"proteína","Amendoim":"proteína"};
+const DISF=new Set(["tartrazina","ins 102","e102","amarelo crepusculo","ins 110","e110","vermelho 40","caseina","caseinato","whey","lactoalbumina","lactose","albumina","lisozima","malte","semolina"]);
+const GLOS=[
+["glutamato monossodico|ins 621|e621","Glutamato monossódico","realçador de sabor que contém sódio. Some com o sal da comida, importante para quem cuida da pressão."],
+["inosinato|guanilato","Inosinato / guanilato","realçadores de sabor que trabalham junto com o glutamato. Também têm sódio."],
+["maltodextrina","Maltodextrina","um tipo de açúcar feito de amido. Entra rápido no sangue, atenção para quem tem diabetes."],
+["xarope de glicose|xarope de milho|acucar invertido|dextrose","Açúcar com outro nome","xaropes e dextrose são açúcares, mesmo sem a palavra no rótulo."],
+["amido de milho","Amido de milho","espessante feito de milho. Quem tem alergia a milho deve evitar."],
+["corante caramelo|caramelo","Corante caramelo","dá cor escura. Não alimenta."],
+["goma xantana|ins 415|espessante","Espessante","deixa o produto mais grosso e cremoso."],
+["benzoato|sorbato|conservante|propionato","Conservante","faz o produto durar mais na prateleira."],
+["aroma|aromatizante","Aromatizante","dá cheiro e gosto, mas o rótulo não diz de quê."],
+["gordura vegetal|gordura hidrogenada|gordura de palma|gordura trans","Gordura industrial","dá textura e dura mais. Em excesso, pesa para o coração."],
+["nitrito|nitrato","Nitrito / nitrato","conservante de carnes processadas. Melhor comer pouco."],
+["tartrazina|amarelo crepusculo|ins 102|ins 110|e102|e110|corante artificial|corantes artificiais","Corante artificial","dá cor ao produto. Alguns, como a tartrazina, podem causar reação em pessoas sensíveis."],
+["sal|cloreto de sodio","Sal","fonte de sódio. Vigie a quantidade se você tem pressão alta."],
+["acucar","Açúcar","vale somar com os outros açúcares da lista."]
+];
+const EX={
+tempero:"Sal, amido de milho, glutamato monossódico, açúcar, alho em pó, cebola em pó, realçadores de sabor inosinato dissódico e guanilato dissódico, corante caramelo, aroma natural. Alérgicos: pode conter trigo, leite e soja.",
+biscoito:"Farinha de trigo enriquecida, açúcar, gordura vegetal, xarope de glicose, soro de leite em pó, caseinato de sódio, cacau, sal, lecitina de soja, aromatizante, conservante benzoato de sódio. Contém glúten e soja.",
+macarrao:"Farinha de trigo, gordura de palma, sal, amido, glutamato monossódico, maltodextrina, corante, ovo. Contém glúten e ovo. Pode conter soja."
+};
+
+const SINON={"corante amarelo":["tartrazina","ins 102","e102","amarelo crepusculo","ins 110","e110","amarelo 5","amarelo 6"],"corante vermelho":["vermelho 40","ins 129","e129","carmim","ins 120","e120"],"corante azul":["azul brilhante","ins 133","e133","indigotina","ins 132"]};
+let customs=[];
+const termos=a=>{const k=ALERG[a];if(!customs.includes(a))return k;const f=fold(a);return k.concat(...Object.entries(SINON).filter(([s])=>f.includes(s)).map(([,v])=>v))};
+const pat=(a,k)=>{const w=customs.includes(a)?k.split(" ").filter(x=>x.length>2&&!/^(de|da|do|dos|das)$/.test(x)):[];
+  if(w.length<2)return "\\b"+rx(k)+"s?\\b";
+  const p=x=>x.map(y=>"\\b"+rx(y)+"s?\\b").join("[^,.;:]{0,60}?");
+  return "(?:"+p(w)+"|"+p([...w].reverse())+")"};const perfil=new Set();
+let profiles=[{n:"Eu",a:[]}],cur=0;
+const save=()=>{profiles[cur].a=[...perfil];try{localStorage.setItem("nf3",JSON.stringify({p:profiles,c:cur,u:customs}))}catch(e){}};
+function load(o){
+  customs=(o.u||[]).filter(c=>typeof c==="string"&&c.length<=40).slice(0,30);
+  customs.forEach(c=>{ALERG[c]=[fold(c)]});
+  profiles=(o.p||[]).slice(0,10).map(x=>({n:String(x.n||"Eu").slice(0,30),a:(x.a||[]).filter(a=>typeof a==="string"&&a.length<=40),s:(x.s||[]).slice(0,50).map(y=>({n:String(y.n||"").slice(0,60),t:String(y.t||"").slice(0,1500),d:String(y.d||"").slice(0,10),w:!!y.w}))}));
+  if(!profiles.length)profiles=[{n:"Eu",a:[]}];
+  cur=Math.min(Math.max(o.c||0,0),profiles.length-1);
+  profiles.forEach(p=>p.a.forEach(a=>{if(!ALERG[a]){ALERG[a]=[fold(a)];if(!customs.includes(a))customs.push(a)}}));
+  perfil.clear();profiles[cur].a.forEach(a=>perfil.add(a));
+}
+try{const raw=localStorage.getItem("nf3");
+  if(raw)load(JSON.parse(raw));
+  else{const oc=JSON.parse(localStorage.getItem("nf_custom")||"[]"),op=JSON.parse(localStorage.getItem("nf_perfil")||"[]");if(op.length||oc.length)load({u:oc,p:[{n:"Eu",a:op}]})}}catch(e){}
+try{if(location.hash.indexOf("#p=")===0)load(JSON.parse(decodeURIComponent(escape(atob(location.hash.slice(3))))))}catch(e){}
+const tg=a=>'<span class="tag hit">'+esc(a.toUpperCase())+'</span>';
+function prods(){return profiles[cur].s||(profiles[cur].s=[])}
+function lista(){
+  const box=$("listaSeg");box.innerHTML="";const L=prods();
+  if(!L.length){box.innerHTML='<p class="note">Nenhum produto guardado para '+esc(profiles[cur].n)+' ainda. Analise um rótulo e toque em "Guardar como seguro".</p>';return}
+  L.forEach((x,i)=>{const d=document.createElement("div");d.className="it";
+    const t=document.createElement("div"),b=document.createElement("b"),sm=document.createElement("small");
+    b.textContent=x.n;sm.textContent=x.d+(x.w?" - com aviso de traços":"");t.append(b,document.createElement("br"),sm);
+    const r=document.createElement("button");r.type="button";r.className="ex";r.textContent="Reanalisar";r.onclick=()=>{$("txt").value=x.t;go(true)};
+    const del=document.createElement("button");del.type="button";del.className="rm";del.textContent="✕";del.setAttribute("aria-label","Remover "+x.n);del.onclick=()=>{L.splice(i,1);save();lista()};
+    d.append(t,r,del);box.appendChild(d)});
+}
+function painel(){
+  const pf=$("perfs");pf.innerHTML="";lista();
+  profiles.forEach((p,i)=>{const b=document.createElement("button");b.type="button";b.className="chip";b.textContent="👤 "+p.n;b.setAttribute("aria-pressed",i===cur?"true":"false");
+    b.onclick=()=>{save();cur=i;perfil.clear();profiles[i].a.forEach(a=>perfil.add(a));chips();if($("txt").value.trim())go(false)};pf.appendChild(b)});
+  const nm=profiles[cur].n,al=[...perfil];
+  $("phint").textContent="Marque as alergias de "+nm+". Não achou a sua? Escreva abaixo e adicione.";
+  const tr=$("troque"),cd=$("cartao");
+  if(!al.length){tr.classList.add("hide");cd.classList.add("hide");return}
+  const cu=al.filter(a=>customs.includes(a)).map(fold);
+  const ok=FOODS.filter(f=>!f[1].some(a=>perfil.has(a))&&!cu.some(c=>{const n=fold(f[0]);return c.length>2&&(n.includes(c)||c.includes(n))}));
+  let h='<p style="margin:0 0 8px">Sem o que <b>'+esc(nm)+'</b> evita, estas comidas comuns e baratas continuam no prato:</p><div>'+ok.map(f=>'<span class="tag okt">'+esc(f[0])+'</span>').join("")+'</div>';
+  [...new Set(al.map(a=>NUTR[a]).filter(Boolean))].forEach(n=>{
+    const cau=al.filter(a=>NUTR[a]===n).map(a=>a.toUpperCase()).join(", "),src=ok.filter(f=>f[2].includes(n)).map(f=>f[0]);
+    h+='<p class="note">Cortar <b>'+esc(cau)+'</b> pode fazer faltar <b>'+n+'</b>. '+(src.length?'Fontes que cabem no perfil: '+esc(src.join(", "))+'.':'Converse com uma nutricionista sobre como repor.')+'</p>'});
+  h+='<p class="note">Sugestão geral, para validar com nutricionista. As alergias que você digitou só tiram da lista a comida com o mesmo nome, então confira o resto.</p>';
+  $("troqueBody").innerHTML=h;tr.classList.remove("hide");
+  $("cartaoBody").innerHTML='<div class="nm">'+esc(nm)+'</div><div>Tenho alergia alimentar a:</div><div style="margin:6px 0">'+al.map(tg).join("")+'</div><div class="note">Em caso de reação, procure atendimento médico.</div>';
+  cd.classList.remove("hide");
+}
+$("padd").onclick=()=>{const n=$("pin").value.trim();if(!n||profiles.length>=10)return;save();profiles.push({n:n.slice(0,30),a:[]});cur=profiles.length-1;perfil.clear();$("pin").value="";save();chips()};
+$("pin").onkeydown=e=>{if(e.key==="Enter")$("padd").click()};
+$("pdel").onclick=()=>{if(profiles.length>1){profiles.splice(cur,1);cur=0}else{profiles[0].a=[]}perfil.clear();profiles[cur].a.forEach(a=>perfil.add(a));save();chips()};
+let pc=0;$("pall").onclick=()=>{if(!pc){pc=1;$("pall").textContent="Toque de novo para confirmar";return}
+  pc=0;$("pall").textContent="Apagar todos os dados";customs.forEach(c=>delete ALERG[c]);customs=[];profiles=[{n:"Eu",a:[]}];cur=0;perfil.clear();try{localStorage.removeItem("nf3")}catch(e){}chips();$("code").value="";$("cmsg").textContent="Dados apagados."};
+$("cgen").onclick=()=>{save();const c=btoa(unescape(encodeURIComponent(JSON.stringify({p:profiles,c:cur,u:customs}))));$("code").value=c;
+  try{navigator.clipboard.writeText(c).then(()=>{$("cmsg").textContent="Código copiado. Guarde em um lugar seguro."},()=>{$("cmsg").textContent="Copie o código do campo acima."})}catch(e){$("cmsg").textContent="Copie o código do campo acima."}};
+$("cimp").onclick=()=>{try{load(JSON.parse(decodeURIComponent(escape(atob($("code").value.trim())))));save();chips();$("cmsg").textContent="Perfis importados."}catch(e){$("cmsg").textContent="Código inválido. Cole o código completo."}};
+function chips(){
+  const box=$("chips");box.innerHTML="";
+  Object.keys(ALERG).forEach(a=>{
+    const w=document.createElement("span");w.className="cx";
+    const b=document.createElement("button");b.type="button";b.className="chip";
+    b.textContent=(EMO[a]||"✍️")+" "+a;b.setAttribute("aria-pressed",perfil.has(a)?"true":"false");
+    b.onclick=()=>{perfil.has(a)?perfil.delete(a):perfil.add(a);b.setAttribute("aria-pressed",perfil.has(a)?"true":"false");save();painel();if($("txt").value.trim())go(false)};
+    w.appendChild(b);
+    if(customs.includes(a)){const x=document.createElement("button");x.type="button";x.className="rm";x.textContent="✕";x.setAttribute("aria-label","Remover "+a);
+      x.onclick=()=>{customs=customs.filter(c=>c!==a);delete ALERG[a];perfil.delete(a);profiles.forEach(p=>{p.a=p.a.filter(x=>x!==a)});save();chips();if($("txt").value.trim())go(false)};w.appendChild(x)}
+    box.appendChild(w);
+  });
+  painel();
+}
+function addCustom(){
+  const v=$("cin").value.trim();if(!v||v.length>40)return;
+  if(!ALERG[v]){ALERG[v]=[fold(v)];customs.push(v)}
+  perfil.add(v);$("cin").value="";save();chips();if($("txt").value.trim())go(false);
+}
+$("cadd").onclick=addCustom;
+$("cin").onkeydown=e=>{if(e.key==="Enter")addCustom()};
+chips();
+document.querySelectorAll("[data-s]").forEach(b=>b.onclick=()=>{$("txt").value=EX[b.dataset.s];go(true)});
+$("go").onclick=()=>go(true);
+
+function analisar(txt){
+  const f=fold(txt).replace(/\b(nao contem|sem|isento de|livre de)\s+(gluten|lactose|leite|ovo|soja|trigo|acucar)\b/g,m=>" ".repeat(m.length));
+  const i=f.search(/pode conter|podem conter|tracos/), end=i>=0?i:f.length;
+  const hits=[];
+  for(const a of Object.keys(ALERG))for(const k of termos(a)){
+    const r=new RegExp(pat(a,k),"g");let m;
+    while((m=r.exec(f)))hits.push({s:m.index,e:m.index+m[0].length,a,k,tr:m.index>=end});
+  }
+  const found=[...new Set(hits.filter(h=>!h.tr).map(h=>h.a))];
+  const traces=[...new Set(hits.filter(h=>h.tr).map(h=>h.a))].filter(a=>!found.includes(a));
+  const items=[],tec=[];
+  for(const g of GLOS){const r=new RegExp("\\b("+g[0]+")\\b","g");let m,ok=false;
+    while((m=r.exec(f))&&m.index<end){ok=true;tec.push({s:m.index,e:m.index+m[0].length})}
+    if(ok)items.push(g)}
+  const disg=[];
+  hits.filter(h=>!h.tr&&DISF.has(h.k)).forEach(h=>{if(!disg.some(d=>d.k===h.k))disg.push(h)});
+  let decl=null;const pm=f.search(/\bcontem\b/);
+  if(pm>=0){const q=f.slice(pm).search(/pode conter|podem conter/);const seg=f.slice(pm,q>=0?pm+q:f.length);
+    decl=new Set(Object.keys(ALERG).filter(a=>termos(a).some(k=>new RegExp(pat(a,k)).test(seg))))}
+  return {f,hits,found,traces,items,tec,disg,decl,end};
+}
+function xray(txt,r){
+  const m=[...r.hits.map(h=>({s:h.s,e:h.e,c:perfil.has(h.a)?"m-red":"m-amb"})),...r.tec.map(t=>({s:t.s,e:t.e,c:"m-tec"}))].sort((a,b)=>a.s-b.s||b.e-a.e);
+  let o="",p=0;
+  for(const x of m){if(x.s<p)continue;o+=esc(txt.slice(p,x.s))+'<mark class="'+x.c+'">'+esc(txt.slice(x.s,x.e))+"</mark>";p=x.e}
+  return o+esc(txt.slice(p));
+}
+const T=a=>'<span class="tag'+(perfil.has(a)?' hit':'')+'">'+esc(a.toUpperCase())+'</span>';
+
+function go(scroll){
+  const txt=$("txt").value.trim(), res=$("res"), out=$("out");
+  res.classList.remove("hide");
+  if(!txt){out.innerHTML='<div class="sem v-neu"><span class="ic">📝</span><b>Cole a lista de ingredientes do rótulo para começar.</b></div>';return}
+  const r=analisar(txt), mine=[...perfil];
+  const hit=r.found.filter(a=>perfil.has(a)), thit=r.traces.filter(a=>perfil.has(a));
+  let v;
+  if(hit.length)v=['v-red','🚫','Atenção: contém '+hit.map(a=>a.toUpperCase()).join(", ")+', do perfil de '+esc(profiles[cur].n)+'. Evite este produto.'];
+  else if(thit.length)v=['v-amb','⚠️','Pode conter traços de '+thit.map(a=>a.toUpperCase()).join(", ")+'. Há risco de contaminação cruzada.'];
+  else if(!mine.length)v=['v-neu','👋','Marque suas alergias no passo 1 para receber o alerta personalizado.'];
+  else v=['v-ok','🔍','Não achamos nada do seu perfil nesta lista. Mesmo assim, confira no pacote.'];
+
+  const ing=txt.split(/\b(contém|contem|alérgicos|alergicos|pode conter|podem conter)/i)[0].split(/[,.;:]/).map(s=>s.trim()).filter(Boolean);
+  const b1=ing.length?'Essa lista tem '+ing.length+' ingredientes, do que tem mais para o que tem menos. O produto é feito principalmente de: <b>'+esc(ing.slice(0,3).join(", "))+'</b>.':'Não conseguimos separar os ingredientes. Confira o texto.';
+  let b2=r.found.length?'<div>Contém: '+r.found.map(T).join("")+'</div>':'<div>Nenhum alérgeno comum achado na lista.</div>';
+  if(r.traces.length)b2+='<div>Pode conter (traços): '+r.traces.map(T).join("")+'</div>';
+  if(r.items.length)b2+='<ul>'+r.items.map(g=>'<li><b>'+esc(g[1].toUpperCase())+'</b>: '+esc(g[2])+'</li>').join("")+'</ul>';
+  const ids=r.items.map(g=>g[1]).join(" ");
+  let tip='Prefira produtos com lista curta, com ingredientes que você reconhece.';
+  if(/Glutamato|Inosinato/.test(ids))tip='Faça seu tempero em casa: alho, cebola, cebolinha, salsa e limão batidos com um pouco de sal. Dura alguns dias na geladeira e custa centavos.';
+  else if(/Açúcar com outro nome|Maltodextrina/.test(ids))tip='Troque por uma fruta da estação (banana, mamão, laranja). Mais barata, mais completa e sem açúcar escondido.';
+
+  let hid="";
+  if(r.disg.length)hid='<div class="blk x"><h3>🕵️ Nomes disfarçados</h3>Estas palavras não parecem alérgenos, mas são:<ul>'+r.disg.map(h=>'<li><b>'+esc(h.k.toUpperCase())+'</b> = '+T(h.a)+'</li>').join("")+'</ul></div>';
+  let cmp="";
+  if(r.decl){const miss=r.found.filter(a=>!r.decl.has(a));
+    cmp='<div class="blk x"><h3>⚖️ O aviso do rótulo bate com os ingredientes?</h3>'+(miss.length?'O aviso "Contém" não cita '+miss.map(T).join("")+', mas '+(miss.length>1?'aparecem':'aparece')+' na lista de ingredientes. Confira no pacote.':'Sim, o aviso "Contém" cita o que achamos na lista.')+'</div>'}
+
+  out.innerHTML='<div class="sem '+v[0]+'"><span class="ic">'+v[1]+'</span><b>'+v[2]+'</b></div>'
+   +'<div class="blk"><h3>🔬 Raio-X do rótulo</h3><div class="xray">'+xray(txt,r)+'</div><div class="leg"><mark class="m-red">do seu perfil</mark> <mark class="m-amb">outro alérgeno</mark> <mark class="m-tec">nome técnico</mark></div></div>'
+   +hid+cmp
+   +'<div class="blk"><h3>🔍 O que é isso em português claro</h3>'+b1+'</div>'
+   +'<div class="blk w"><h3>⚠️ Alerta de ingredientes ocultos e alérgenos</h3>'+b2+'</div>'
+   +'<div class="blk t"><h3>💡 Dica barata e saudável</h3>'+esc(tip)+'<br><small>Confira se combina com suas alergias.</small></div>';
+  const nmp=profiles[cur].n;
+  out.innerHTML+=hit.length?'<div class="blk w"><h3>⭐ Guardar na minha lista</h3>Este produto tem algo do perfil de '+esc(nmp)+', então não entra na lista de seguros.</div>'
+    :'<div class="blk t"><h3>⭐ Guardar como seguro</h3><div class="add"><input type="text" id="sname" maxlength="60" placeholder="Nome do produto (ex.: Biscoito da marca X)" aria-label="Nome do produto"><button class="btn" type="button" id="ssave">Guardar</button></div><p class="note" id="smsg"></p></div>';
+  const sb=$("ssave");
+  if(sb)sb.onclick=()=>{const n=$("sname").value.trim();if(!n){$("smsg").textContent="Dê um nome ao produto.";return}
+    const L=prods(),item={n:n.slice(0,60),t:txt.slice(0,1500),d:new Date().toLocaleDateString("pt-BR"),w:thit.length>0};
+    const k=L.findIndex(x=>fold(x.n)===fold(item.n));if(k>=0)L[k]=item;else L.unshift(item);
+    if(L.length>50)L.length=50;save();lista();$("smsg").textContent="Guardado na lista de "+profiles[cur].n+".";};
+  if(scroll)res.scrollIntoView({behavior:"smooth",block:"start"});
+}
+
+</script>
+</body>
+</html>
